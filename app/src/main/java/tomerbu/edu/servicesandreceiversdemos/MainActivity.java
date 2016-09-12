@@ -1,6 +1,9 @@
 package tomerbu.edu.servicesandreceiversdemos;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +14,8 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
+    private FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+       fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -30,6 +35,31 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        BroadcastReceiver planeReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getBooleanExtra("state", false)==true){
+                    fab.setVisibility(View.GONE);
+                }
+                else
+                    fab.setVisibility(View.VISIBLE);
+            }
+        };
+
+        registerReceiver(planeReceiver,
+                new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED));
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Utils.showFab){
+            fab.setVisibility(View.VISIBLE);
+        }
+        else
+            fab.setVisibility(View.GONE);
     }
 
     @Override

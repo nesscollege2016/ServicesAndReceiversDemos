@@ -40,4 +40,6 @@ public class Utils {
                 info.isConnected() &&
                 info.getType() == ConnectivityManager.TYPE_WIFI;
     }
+
+    public static boolean showFab = true;
 }
